@@ -97,9 +97,12 @@ Ce projet met en pratique l’ensemble de la chaîne de déploiement moderne d�
 ## Captures d'écran / logs
 
 Voir les commits GitHub pour les logs d’éxécution Ansible, screenshots, et historiques de release :
+
 ![image](https://github.com/user-attachments/assets/1d669ca5-9750-4b53-b6f4-79981084b71e)
+
 ![image](https://github.com/user-attachments/assets/8076949c-a18c-47a7-8c1c-92cc1ac66313)
 
+![image](https://github.com/user-attachments/assets/c5e7670b-1cb6-4d55-8497-0bdc5def4a5f)
 
 
 * [x] Terraform OK ✅
