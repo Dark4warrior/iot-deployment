@@ -1,0 +1,36 @@
+name: Release and Deploy
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate changelog and version
+        run: npx standard-version
+
+      - name: Commit changelog and tag
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          git add .
+          git commit -m "chore(release): version bump"
+          git push --follow-tags origin HEAD:main || true
+
+      - name: Run release.sh (trigger Ansible deploy)
+        run: bash ./release.sh

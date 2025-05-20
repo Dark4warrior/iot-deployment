@@ -1,0 +1,71 @@
+---
+- name: Déploiement API IoT
+  hosts: iot
+  become: true
+
+  tasks:
+    - name: Mettre à jour apt
+      apt:
+        update_cache: yes
+
+    - name: Installer Git
+      apt:
+        name: git
+        state: present
+    
+    - name: Supprimer Node.js et npm installés par défaut
+      apt:
+        name:
+          - nodejs
+          - npm
+        state: absent
+      ignore_errors: yes
+
+    - name: Supprimer libnode-dev s'il bloque l'installation
+      apt:
+        name: libnode-dev
+        state: absent
+      ignore_errors: yes
+
+    - name: Supprimer le paquet libnode72 bloquant
+      apt:
+        name: libnode72
+        state: absent
+      ignore_errors: yes
+
+    - name: Télécharger le script d'installation Node.js 18
+      get_url:
+        url: https://deb.nodesource.com/setup_18.x
+        dest: /tmp/nodesource_setup.sh
+        mode: '0755'
+
+    - name: Exécuter le script NodeSource
+      command: bash /tmp/nodesource_setup.sh
+
+    - name: Installer Node.js (via NodeSource)
+      apt:
+        name: nodejs
+        state: present
+        update_cache: yes
+
+    - name: Installer PM2
+      npm:
+        name: pm2
+        global: yes
+        executable: npm
+
+    - name: Cloner ou mettre à jour le dépôt
+      git:
+        repo: 'https://github.com/Dark4warrior/iot-deployment.git'
+        dest: /home/azureuser/iot-api
+        version: main
+        force: yes
+
+    - name: Installer les dépendances npm
+      npm:
+        path: /home/azureuser/iot-api/api
+
+    - name: Lancer l'API avec pm2
+      command: pm2 start index.js
+      args:
+        chdir: /home/azureuser/iot-api/api
