@@ -1,6 +1,6 @@
 {
   "name": "iot-api",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "description": "API de supervision IoT",
   "main": "index.js",
   "scripts": {
